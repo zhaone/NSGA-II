@@ -9,12 +9,16 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 from matplotlib.figure import figaspect
 
+import time
+
 # from nsga2ori import nsga2
 from nsga2 import nsga2
 
 # only for 2-d, 2-objective-func data
-def visulize(objsFunc, states):
+def visulize(objsFunc, states, interval=(0, 1000), showEvery=1):
     for iterNum, pop in enumerate(states):
+        if iterNum % showEvery != 0 and iterNum != len(states)-1:
+            continue
         fig = plt.figure(constrained_layout=True, figsize=figaspect(.5))
         gs = fig.add_gridspec(2, 2)
         ax_lu = fig.add_subplot(gs[0, 0])
@@ -24,7 +28,7 @@ def visulize(objsFunc, states):
         cmaps = cm.get_cmap('viridis', len(pop))
         sca_cmaps = [np.expand_dims(np.array(cmaps(i)), axis=0) for i in range(len(pop))]
 
-        x = np.arange(0, 1000)
+        x = np.arange(interval[0], interval[1])
         model_obj = objsFunc(x)
         ax_lu.plot(x, model_obj[:, 0])
         ax_lb.plot(x, model_obj[:, 1])
@@ -51,8 +55,31 @@ def visulize(objsFunc, states):
         
         # plt.savefig('./iter_{}.png'.format(iterNum))
         plt.show()
+
+
+def sch1Test(popSize=10, iterNum=10):
+    from objfunc import sch1_objectives
+    finalPop, state = nsga2(objsFunc=sch1_objectives,
+                            CFKwargs={'cross_prob': 0.2},
+                            MFKwargs={'mute_prob': 0.01},
+                            popSize=popSize,
+                            interval=(-10, 10),
+                            iterNum=iterNum,
+                            return_state=True)
+
+    visulize(sch1_objectives, state, interval=(-10, 10))
+
+
+def sch2Test(popSize=10, iterNum=10):
+    from objfunc import sch2_objectives
+    finalPop, state = nsga2(objsFunc=sch2_objectives,
+                            CFKwargs={'cross_prob': 0.2},
+                            MFKwargs={'mute_prob': 0.01},
+                            popSize=popSize,
+                            interval=(-5, 10),
+                            iterNum=iterNum,
+                            return_state=True)
+
+    visulize(sch2_objectives, state, interval=(-5, 10))
 if __name__ == "__main__":
-    from objfunc import toy_objectives
-    finalPop, state = nsga2(return_state=True)
-    print(finalPop)
-    visulize(toy_objectives, state)
+    sch2Test()
