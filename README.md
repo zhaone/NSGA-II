@@ -1,5 +1,5 @@
 # NSGA-II
-A python implement of NSGA-II multi-objective optimization algorithm.
+A python implementation of NSGA-II multi-objective optimization algorithm.
 
 ## Paper
 Original paper see [here](https://ieeexplore.ieee.org/document/996017).
@@ -21,8 +21,6 @@ Following 2 GIFs visulize the optimization process (10 iterations) of multi-obje
 ![Objective funcs value](./img/obj.gif)
 
 ## Usage
-Requriment:
+Requirements:
 - numpy
 - matplotlib
-
-I'm still working on refactorring the code. Please be patient.
